@@ -2295,3 +2295,11 @@ dialog::backdrop {
     inset 0 0 0 3px #152319,
     inset 0 0 0 5px #fff;
 }
+
+.stage-container[role="button"] {
+  cursor: pointer;
+}
+.stage-container[role="button"]:focus-visible {
+  outline: 3px solid #f5c451;
+  outline-offset: 3px;
+}

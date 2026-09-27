@@ -1,3 +1,4 @@
+import { RIFF_IDLE_MS, RIFF_RELEASE_MS } from "./BandAudio";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   Activity as ActivityIcon,
@@ -62,7 +63,7 @@ import {
   type State,
 } from "./engine";
 import PerformanceStage, { MusicianArt, RosterStrip } from "./PerformanceStage";
-import { playSound } from "./audio";
+import { playSound, stopRiff, setBandLineup, prepareBandAudio } from "./audio";
 import SongPlayer, { SONGS, type SongPlayerHandle } from "./SongPlayer";
 
 type Tab = "Gear" | "Band" | "Gigs" | "Albums";
@@ -246,6 +247,16 @@ export default function App() {
     }
     return s;
   }
+  useEffect(() => {
+    if (!state.sound) stopRiff();
+    else prepareBandAudio();
+    return stopRiff;
+  }, [state.sound]);
+
+  useEffect(() => {
+    setBandLineup(state.lineup);
+  }, [state.lineup]);
+
   function act(fn: (s: State) => State, sound = false) {
     const base = tick();
     const next = fn(base);
@@ -261,8 +272,10 @@ export default function App() {
         if (!document.hidden) save(current.current);
       }, 10000);
     const visibility = () => {
-      if (document.hidden) save(current.current);
-      else {
+      if (document.hidden) {
+        stopRiff();
+        save(current.current);
+      } else {
         tick(true);
         save(current.current);
       }
@@ -291,10 +304,13 @@ export default function App() {
     act(riff);
     if (current.current.sound) playSound("riff");
     setPlaying(true);
-    riffUntil.current = Date.now() + 450;
-    schedule(() => {
-      if (Date.now() >= riffUntil.current) setPlaying(false);
-    }, 460);
+    riffUntil.current = Date.now() + RIFF_IDLE_MS + RIFF_RELEASE_MS;
+    schedule(
+      () => {
+        if (Date.now() >= riffUntil.current) setPlaying(false);
+      },
+      RIFF_IDLE_MS + RIFF_RELEASE_MS + 10,
+    );
     const id = ++toastId.current;
     setParticles((p) => [
       ...p.slice(-7),
@@ -517,7 +533,19 @@ export default function App() {
                   {performanceVenue === 0 ? "DIY OR DIE" : location.tag}
                 </span>
               </div>
-              <div className="stage-container">
+              <div
+                className="stage-container"
+                role="button"
+                tabIndex={0}
+                aria-label="Play riff on stage"
+                onClick={doRiff}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    doRiff();
+                  }
+                }}
+              >
                 <PerformanceStage state={state} playing={playing} />
                 <div className="stage-stamp">
                   <Radio size={13} /> {state.name.toUpperCase()}{" "}
@@ -613,11 +641,16 @@ export default function App() {
                 </button>
                 <p className="riff-hint">
                   Click. Earn. Upgrade. Repeat.{" "}
-                  <span>The underground is listening.</span>
+                  <span>Recruit bandmates to add their instruments.</span>
                 </p>
               </div>
             </div>
             <SongPlayer
+              riffPlaying={playing}
+              backgroundMusic={state.backgroundMusic}
+              onToggleBackgroundMusic={() =>
+                act((s) => ({ ...s, backgroundMusic: !s.backgroundMusic }))
+              }
               playerRef={songAudio}
               unlockedTitles={state.albums.map((index) => ALBUMS[index].name)}
             />
@@ -1209,10 +1242,22 @@ export default function App() {
               </form>
               <button
                 className="setting-row"
+                aria-pressed={state.backgroundMusic}
+                onClick={() =>
+                  act((s) => ({ ...s, backgroundMusic: !s.backgroundMusic }))
+                }
+              >
+                <span>
+                  <Volume2 size={18} /> Background music
+                </span>
+                <b>{state.backgroundMusic ? "ON" : "OFF"}</b>
+              </button>
+              <button
+                className="setting-row"
                 onClick={() => act((s) => ({ ...s, sound: !s.sound }))}
               >
                 <span>
-                  <Volume2 size={18} /> Synthesized riff & interface sounds
+                  <Volume2 size={18} /> Band performance & interface sounds
                 </span>
                 <b>{state.sound ? "ON" : "OFF"}</b>
               </button>

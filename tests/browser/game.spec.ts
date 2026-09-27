@@ -587,3 +587,160 @@ test("background music loops and yields to the final album", async ({
     .poll(() => bed.evaluate((a: HTMLAudioElement) => a.paused))
     .toBe(true);
 });
+
+test("band stems stay synchronized, follow recruitment, and respect both mute controls", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    const proto = AudioContext.prototype;
+    const create = proto.createBufferSource;
+    const gain = proto.createGain;
+    const decode = proto.decodeAudioData;
+    const audit: any = ((window as any).bandAudit = {
+      sources: [],
+      gains: [],
+      decoded: 0,
+    });
+    proto.createBufferSource = function () {
+      const source = create.call(this);
+      const entry = { node: source, start: 0, stopped: false };
+      const start = source.start.bind(source),
+        stop = source.stop.bind(source);
+      source.start = (when = 0, offset = 0) => {
+        entry.start = when;
+        start(when, offset);
+      };
+      source.stop = (when = 0) => {
+        entry.stopped = true;
+        stop(when);
+      };
+      audit.sources.push(entry);
+      return source;
+    };
+    proto.createGain = function () {
+      const node = gain.call(this);
+      audit.gains.push(node);
+      return node;
+    };
+    proto.decodeAudioData = function (buffer: ArrayBuffer) {
+      return decode.call(this, buffer).then((result) => {
+        audit.decoded++;
+        return result;
+      });
+    };
+  });
+  await seed(page, { ...fresh(), sound: true, credits: 200000 });
+  await expect
+    .poll(() => page.evaluate(() => (window as any).bandAudit.decoded), {
+      timeout: 20000,
+    })
+    .toBe(5);
+  const riff = page.getByRole("button", { name: "PLAY RIFF MAKE SOME NOISE" });
+  const background = page
+    .getByRole("region", { name: "Background music", exact: true })
+    .locator("audio");
+  const stage = page.getByRole("button", {
+    name: "Play riff on stage",
+    exact: true,
+  });
+  await stage.click();
+  await expect
+    .poll(() => background.evaluate((a: HTMLAudioElement) => a.paused))
+    .toBe(true);
+  expect(
+    await page.evaluate(() => {
+      const buffer = (window as any).bandAudit.sources[0].node
+        .buffer as AudioBuffer;
+      const samples = buffer
+        .getChannelData(0)
+        .slice(0, buffer.sampleRate * 0.1);
+      return Math.sqrt(
+        samples.reduce((sum, value) => sum + value * value, 0) / samples.length,
+      );
+    }),
+  ).toBeGreaterThan(0.005);
+  await page.waitForTimeout(700);
+  await stage.press("Space");
+  expect(
+    await page.evaluate(() => (window as any).bandAudit.sources.length),
+  ).toBe(5);
+  for (let i = 0; i < 8; i++) {
+    await riff.click();
+    await page.waitForTimeout(100);
+  }
+  expect(
+    await page.evaluate(() => (window as any).bandAudit.sources.length),
+  ).toBe(5);
+  expect(
+    await page.evaluate(
+      () =>
+        new Set((window as any).bandAudit.sources.map((s: any) => s.start))
+          .size,
+    ),
+  ).toBe(1);
+  expect(
+    await page.evaluate(() =>
+      (window as any).bandAudit.gains
+        .slice(1, 6)
+        .map((g: GainNode) => g.gain.value),
+    ),
+  ).toEqual([1, 0, 0, 0, 0]);
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        (window as any).bandAudit.sources.every((s: any) => s.stopped),
+      ),
+    )
+    .toBe(true);
+  await expect
+    .poll(() => background.evaluate((a: HTMLAudioElement) => a.paused))
+    .toBe(false);
+  await page.getByRole("button", { name: "Band 0/4", exact: true }).click();
+  for (const member of ["Hex", "Echo", "Nyx", "Zero"]) {
+    await page
+      .locator(".musician")
+      .filter({ has: page.getByRole("heading", { name: member, exact: true }) })
+      .getByRole("button")
+      .click();
+  }
+  await riff.click();
+  await expect
+    .poll(() => page.evaluate(() => (window as any).bandAudit.sources.length))
+    .toBe(10);
+  expect(
+    await page.evaluate(() =>
+      (window as any).bandAudit.gains
+        .slice(-5)
+        .map((g: GainNode) => g.gain.value),
+    ),
+  ).toEqual([1, 1, 1, 1, 1]);
+  await page
+    .getByRole("button", { name: "Mute sound effects", exact: true })
+    .click();
+  await riff.click();
+  expect(
+    await page.evaluate(() =>
+      (window as any).bandAudit.sources.every((s: any) => s.stopped),
+    ),
+  ).toBe(true);
+  expect(
+    await page.evaluate(() => (window as any).bandAudit.sources.length),
+  ).toBe(10);
+  await page
+    .getByRole("button", { name: "Mute background music", exact: true })
+    .click();
+  await expect
+    .poll(async () => (await saved(page)).backgroundMusic)
+    .toBe(false);
+  await page.reload();
+  await expect(
+    page.getByRole("button", { name: "Enable background music", exact: true }),
+  ).toBeVisible();
+  await riff.click();
+  expect(
+    await page
+      .getByRole("region", { name: "Background music" })
+      .locator("audio")
+      .evaluate((a: HTMLAudioElement) => a.paused),
+  ).toBe(true);
+});

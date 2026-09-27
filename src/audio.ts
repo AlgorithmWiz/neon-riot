@@ -1,23 +1,42 @@
+import { BandAudio } from "./BandAudio";
+import type { Role } from "./content";
+
+const band = new BandAudio(
+  (["guitar", "drums", "bass", "vocals", "synth"] as const).map((role) => ({
+    role,
+    src: `${import.meta.env.BASE_URL}audio/band/${role}.mp3`,
+    volume: 1,
+  })),
+);
+export const stopRiff = () => band.stop();
+export const setBandLineup = (lineup: Partial<Record<Role, string>>) =>
+  band.setLineup(lineup);
+export const prepareBandAudio = () => {
+  try {
+    void band.prepare().catch(() => {});
+  } catch {
+    // Browsers without Web Audio can still run the game.
+  }
+};
+
 let context: AudioContext | undefined;
 export function playSound(kind: "riff" | "buy") {
   try {
+    if (kind === "riff") {
+      void band.riff();
+      return;
+    }
     context ??= new AudioContext();
     void context.resume();
     const now = context.currentTime;
-    for (const [offset, freq] of kind === "riff"
-      ? [
-          [0, 82.41],
-          [0.015, 123.47],
-          [0.03, 164.81],
-        ]
-      : [
-          [0, 440],
-          [0.09, 660],
-        ]) {
+    for (const [offset, freq] of [
+      [0, 440],
+      [0.09, 660],
+    ]) {
       const oscillator = context.createOscillator(),
         gain = context.createGain(),
         filter = context.createBiquadFilter();
-      oscillator.type = kind === "riff" ? "sawtooth" : "sine";
+      oscillator.type = "sine";
       oscillator.frequency.setValueAtTime(freq, now + offset);
       filter.type = "lowpass";
       filter.frequency.value = 800;

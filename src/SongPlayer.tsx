@@ -46,9 +46,15 @@ export type SongPlayerHandle = { playSong: (title: string) => void };
 export default function SongPlayer({
   playerRef,
   unlockedTitles,
+  backgroundMusic,
+  riffPlaying,
+  onToggleBackgroundMusic,
 }: {
   playerRef: RefObject<SongPlayerHandle | null>;
   unlockedTitles: string[];
+  backgroundMusic: boolean;
+  riffPlaying: boolean;
+  onToggleBackgroundMusic: () => void;
 }) {
   const unlockedSongs = SONGS.filter((entry) =>
     unlockedTitles.includes(entry.title),
@@ -103,7 +109,11 @@ export default function SongPlayer({
 
   return (
     <>
-      <BackgroundMusic suspended={playing} />
+      <BackgroundMusic
+        suspended={playing || riffPlaying}
+        enabled={backgroundMusic}
+        onToggle={onToggleBackgroundMusic}
+      />
       <section
         className={`song-player ${playing ? "song-playing" : ""} ${song ? "" : "song-locked"}`}
         aria-label="Pirate radio music player"
@@ -191,9 +201,16 @@ export default function SongPlayer({
   );
 }
 
-function BackgroundMusic({ suspended }: { suspended: boolean }) {
+function BackgroundMusic({
+  suspended,
+  enabled,
+  onToggle,
+}: {
+  suspended: boolean;
+  enabled: boolean;
+  onToggle: () => void;
+}) {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [enabled, setEnabled] = useState(true);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -229,12 +246,12 @@ function BackgroundMusic({ suspended }: { suspended: boolean }) {
         <h3>Relentless Overdrive</h3>
         <button
           className="song-select"
-          onClick={() => setEnabled(!enabled)}
+          onClick={onToggle}
           aria-pressed={enabled}
         >
           {enabled ? "Mute background music" : "Enable background music"}
         </button>
-        {enabled && suspended && <p>Paused while the album song plays.</p>}
+        {enabled && suspended && <p>Paused during the performance.</p>}
         <audio
           ref={audioRef}
           src={`${import.meta.env.BASE_URL}audio/relentless drive.mp3`}

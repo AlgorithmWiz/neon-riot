@@ -39,6 +39,7 @@ export type State = {
   created: number;
   tutorial: boolean;
   sound: boolean;
+  backgroundMusic: boolean;
   reducedMotion: boolean;
 };
 export function fresh(now = Date.now()): State {
@@ -63,6 +64,7 @@ export function fresh(now = Date.now()): State {
     created: now,
     tutorial: true,
     sound: false,
+    backgroundMusic: true,
     reducedMotion: false,
   };
 }
@@ -269,6 +271,7 @@ export function prestige(s: State, now = Date.now()): State {
     era: s.era + 1,
     achievements: s.achievements,
     sound: s.sound,
+    backgroundMusic: s.backgroundMusic,
     reducedMotion: s.reducedMotion,
     tutorial: false,
   });
@@ -290,6 +293,7 @@ export function deserialize(raw: string): State {
   if (!x || typeof x !== "object" || Array.isArray(x))
     throw new Error("Invalid save data.");
   const s = x as State;
+  if (s.backgroundMusic === undefined) s.backgroundMusic = true;
   if (s.version !== 1)
     throw new Error(
       "Unsupported save version. Your existing save has not been replaced.",
@@ -366,7 +370,7 @@ export function deserialize(raw: string): State {
     !s.achievements.every((a) =>
       ACHIEVEMENTS.some((entry) => entry.id === a),
     ) ||
-    !["orbital", "tutorial", "sound", "reducedMotion"].every(
+    !["orbital", "tutorial", "sound", "backgroundMusic", "reducedMotion"].every(
       (k) => typeof s[k as keyof State] === "boolean",
     )
   )

@@ -195,3 +195,15 @@ describe("legacy and saves", () => {
     expect(() => deserialize(serialize({ ...s, credits: Infinity }))).toThrow();
   });
 });
+
+it("migrates old music settings and preserves mute through saves and prestige", () => {
+  const old = JSON.parse(serialize(fresh()));
+  delete old.backgroundMusic;
+  expect(deserialize(JSON.stringify(old)).backgroundMusic).toBe(true);
+  const muted = { ...fresh(), backgroundMusic: false, orbital: true };
+  expect(deserialize(serialize(muted)).backgroundMusic).toBe(false);
+  expect(prestige(muted).backgroundMusic).toBe(false);
+  expect(() =>
+    deserialize(JSON.stringify({ ...muted, backgroundMusic: "off" })),
+  ).toThrow();
+});
