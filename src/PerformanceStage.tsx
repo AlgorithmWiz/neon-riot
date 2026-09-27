@@ -10,6 +10,76 @@ const regions = {
   synth: [1600, 383],
 } as const;
 type Instrument = keyof typeof regions;
+type RigPart = { name: string; points: string; pivot: string };
+// Overlapping cutout joints keep necks/wrists covered during restrained motion.
+// Instrument bodies, keyboards and drum shells remain planted in the base layer.
+const rigs: Record<Instrument, RigPart[]> = {
+  guitar: [
+    {
+      name: "head",
+      points: "105,90 302,90 295,235 256,270 178,258 115,230",
+      pivot: "213px 251px",
+    },
+    {
+      name: "hand",
+      points: "118,363 164,378 212,404 206,440 169,441 132,409",
+      pivot: "142px 388px",
+    },
+  ],
+  bass: [
+    {
+      name: "head",
+      points: "489,103 631,103 640,224 597,263 521,243 480,211",
+      pivot: "560px 241px",
+    },
+    {
+      name: "hand",
+      points: "462,394 491,411 508,437 489,465 453,451 444,430",
+      pivot: "476px 411px",
+    },
+  ],
+  drums: [
+    {
+      name: "head",
+      points: "925,189 1026,190 1048,254 1014,307 947,290 921,246",
+      pivot: "980px 284px",
+    },
+    {
+      name: "hand",
+      points: "875,207 911,204 881,302 879,352 839,370 819,344 846,303",
+      pivot: "848px 345px",
+    },
+    {
+      name: "hand offhand",
+      points: "1060,197 1090,198 1109,270 1137,296 1136,337 1103,348 1078,303",
+      pivot: "1110px 328px",
+    },
+  ],
+  vocals: [
+    {
+      name: "head",
+      points: "341,22 650,22 687,197 639,287 515,326 364,248 335,155",
+      pivot: "512px 286px",
+    },
+  ],
+  synth: [
+    {
+      name: "head",
+      points: "1711,114 1869,112 1876,217 1830,293 1751,273 1702,216",
+      pivot: "1789px 266px",
+    },
+    {
+      name: "hand",
+      points: "1680,320 1730,328 1773,359 1778,390 1727,390 1692,363",
+      pivot: "1710px 350px",
+    },
+    {
+      name: "hand offhand",
+      points: "1822,334 1870,336 1907,360 1902,389 1856,388 1827,367",
+      pivot: "1848px 354px",
+    },
+  ],
+};
 export function MusicianArt({
   instrument = "guitar",
   portrait = false,
@@ -28,12 +98,25 @@ export function MusicianArt({
     vocals: "1290 120 180 180",
     synth: "1700 125 180 180",
   };
-  const viewBox = portrait ? portraitBoxes[instrument] : `${x} 0 ${w} 793`;
+  const isVocalist = instrument === "vocals";
+  const viewBox = isVocalist
+    ? portrait
+      ? "300 60 420 420"
+      : "0 0 1024 1536"
+    : portrait
+      ? portraitBoxes[instrument]
+      : `${x} 0 ${w} 793`;
   const [left, top, width, height] = viewBox.split(" ").map(Number);
   const clip = useId();
+  const source = isVocalist
+    ? `${import.meta.env.BASE_URL}art/male-vocalist.webp`
+    : ATLAS;
+  const artWidth = isVocalist ? 1024 : 1983;
+  const artHeight = isVocalist ? 1536 : 793;
+  const parts = portrait ? [] : rigs[instrument];
   return (
     <svg
-      className={`musician-art ${portrait ? "portrait-art" : ""} ${variant ? "alternate-art" : ""}`}
+      className={`musician-art rig-${instrument} ${portrait ? "portrait-art" : ""} ${variant ? "alternate-art" : ""}`}
       viewBox={viewBox}
       preserveAspectRatio={portrait ? "xMidYMid slice" : "xMidYMax meet"}
       aria-hidden="true"
@@ -42,13 +125,56 @@ export function MusicianArt({
         <clipPath id={clip}>
           <rect x={left} y={top} width={width} height={height} />
         </clipPath>
+        {parts.length > 0 && (
+          <mask
+            id={`${clip}-body`}
+            maskUnits="userSpaceOnUse"
+            x={left}
+            y={top}
+            width={width}
+            height={height}
+          >
+            <rect x={left} y={top} width={width} height={height} fill="white" />
+            {parts.map((part, index) => (
+              <polygon
+                key={index}
+                points={part.points}
+                fill="black"
+                stroke="white"
+                strokeWidth="8"
+                strokeLinejoin="round"
+              />
+            ))}
+          </mask>
+        )}
+        {parts.map((part, index) => (
+          <clipPath key={index} id={`${clip}-part-${index}`}>
+            <polygon points={part.points} />
+          </clipPath>
+        ))}
       </defs>
-      <image
-        href={ATLAS}
-        width="1983"
-        height="793"
-        clipPath={`url(#${clip})`}
-      />
+      <g clipPath={`url(#${clip})`}>
+        <image
+          href={source}
+          width={artWidth}
+          height={artHeight}
+          mask={parts.length ? `url(#${clip}-body)` : undefined}
+        />
+        {parts.map((part, index) => (
+          <g
+            key={index}
+            className={`rig-part rig-${part.name.replaceAll(" ", " rig-")}`}
+            style={{ transformOrigin: part.pivot }}
+          >
+            <image
+              href={source}
+              width={artWidth}
+              height={artHeight}
+              clipPath={`url(#${clip}-part-${index})`}
+            />
+          </g>
+        ))}
+      </g>
     </svg>
   );
 }
@@ -101,19 +227,26 @@ export default function PerformanceStage({
     >
       <img
         className="scene-backdrop"
-        src={`${import.meta.env.BASE_URL}art/undercity-stage.webp`}
+        src={`${import.meta.env.BASE_URL}art/cyber-foundry.webp`}
         alt=""
         fetchPriority="high"
         width="1536"
         height="1024"
       />
       <div className="scene-color" />
+      <div className="hanging-lamp lamp-one" aria-hidden="true">
+        <i />
+      </div>
+      <div className="hanging-lamp lamp-two" aria-hidden="true">
+        <i />
+      </div>
       <div className="scene-vignette" />
-      {venue > 0 && (
-        <div className="venue-neon-sign">
-          <span>{scenery[venue]}</span>
-        </div>
-      )}
+      <div className="venue-neon-sign">
+        <span>{scenery[venue]}</span>
+      </div>
+      <div className="stage-circuit circuit-left" aria-hidden="true" />
+      <div className="stage-circuit circuit-right" aria-hidden="true" />
+      <div className="holo-grid" aria-hidden="true" />
       {venue === 5 && <div className="orbital-planet" />}
       {venue === 3 && <div className="foundry-hazard" />}
       <div className="light-beam beam-left" />

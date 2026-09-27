@@ -1,0 +1,943 @@
+/* Rust & feedback — stage iron, amplifier cloth, and the band's road book. */
+:root {
+  --acid: #e8ac58;
+  --cyan: #d5b889;
+  --muted: #b4a18b;
+  --border: #594638;
+  --panel: #241e19;
+  color: #eee0c7;
+  background: #171310;
+}
+.app {
+  background:
+    linear-gradient(#171310ed, #171310f5),
+    url("/art/rust-foundry.webp") center top / 1500px auto repeat-y;
+}
+.topbar {
+  border-bottom: 2px solid #6c4a35;
+  height: 83px;
+}
+.topbar:after {
+  content: "NO LABEL. NO MASTERS.";
+  background: #211a15;
+  color: #c4a17d;
+  font-size: 8px;
+}
+.brand small,
+.top-center {
+  color: #c1ab8d;
+}
+.brand-riot {
+  color: #e9ab67;
+}
+.brand-symbol {
+  background: #b94e32;
+  color: #f4dfb6;
+}
+.header-actions .icon-button {
+  color: #c9bba5;
+}
+.icon-button:hover {
+  background: #554032;
+}
+main {
+  padding-top: 30px;
+}
+.intro {
+  min-height: 214px;
+  margin-bottom: 24px;
+  padding: 16px 25px 22px;
+  border-left: 6px solid #a84b32;
+  background:
+    linear-gradient(90deg, #241b14f2 35%, #271c149e),
+    url("/art/rust-foundry.webp") center 35% / cover;
+}
+.intro:before {
+  content: "EST. 2089 / INDEPENDENT & UNGOVERNABLE";
+  position: absolute;
+  right: 15px;
+  top: 14px;
+  font: 8px var(--mono);
+  letter-spacing: 2px;
+  color: #b29b7a;
+}
+.intro h1 {
+  font-style: normal;
+  font-size: clamp(55px, 6.1vw, 88px);
+  letter-spacing: -1.8px;
+  line-height: 0.86;
+  margin-top: 18px;
+  text-shadow: 2px 3px #171310;
+}
+.intro h1 span {
+  color: #e6b976;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px #171310;
+}
+.intro p {
+  color: #cfbba0;
+  max-width: 420px;
+  line-height: 1.5;
+}
+.intro .eyebrow {
+  color: #e4c19a;
+}
+.transmission-art {
+  width: 176px;
+  height: 176px;
+  left: 62%;
+  top: 29px;
+  z-index: 0;
+  transform: rotate(8deg);
+  transition: transform 0.3s;
+}
+.transmission-art:hover {
+  transform: rotate(3deg) translateY(-4px);
+}
+.transmission-art:after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 55px;
+  width: 70px;
+  height: 23px;
+  background: #c4ae7fba;
+  transform: rotate(-13deg);
+}
+.transmission-art > img {
+  border: 4px solid #c7ad83;
+  box-shadow: 6px 9px 14px #0008;
+}
+.transmission-art > span {
+  color: #d6b996;
+  font-size: 6px;
+}
+.record-disc {
+  display: none;
+}
+.era-label {
+  z-index: 1;
+  min-width: 140px;
+  padding-bottom: 0;
+}
+.era-label > span,
+.era-label small {
+  color: #d1b494;
+}
+.stats {
+  background: repeating-linear-gradient(0deg, #352920 0 2px, #32271f 2px 4px);
+  border: 3px double #856649;
+  box-shadow: 0 5px 0 #0d0b0980;
+  margin-bottom: 28px;
+}
+.stat {
+  padding: 16px 24px;
+  border-color: #715742;
+}
+.stat:before {
+  display: none;
+}
+.stat > span,
+.stat p,
+.stat strong small {
+  color: #c9b497;
+}
+.stat strong {
+  font-family: var(--mono);
+  font-size: 32px;
+  color: #efd6a7;
+}
+.stat strong.acid {
+  color: #ffc676;
+}
+.legend-stat:hover {
+  background: #493427;
+}
+.stage-panel {
+  border: 5px solid #49352a;
+  border-radius: 3px;
+  box-shadow:
+    0 0 0 1px #94735b,
+    6px 8px 0 #0d0b0966;
+  background: #211b17;
+}
+.panel-top {
+  background: #281d16;
+  border-bottom: 1px dashed #7d5a3b;
+}
+.panel-top .eyebrow,
+.panel-top .mono {
+  color: #dbc09b;
+}
+.venue-heading {
+  background: #35271d;
+}
+.venue-heading h2 {
+  font-size: 34px;
+}
+.venue-heading p {
+  color: #c3a889;
+}
+.venue-tag {
+  color: #2e2118;
+  border: 0;
+  background: #d7bd8d;
+  padding: 9px 12px;
+  box-shadow: 2px 3px #100c0980;
+}
+.stage-container {
+  border-color: #7c5739;
+}
+.scene-backdrop {
+  filter: saturate(0.78) contrast(1.04);
+}
+.scene-color {
+  background: linear-gradient(0deg, #6e341a44, transparent 70%);
+}
+.scene-vignette {
+  box-shadow: inset 0 0 60px #190f0a70;
+  background: linear-gradient(0deg, #160d0a75, transparent 30%);
+}
+.scene-scanlines {
+  opacity: 0.08;
+}
+.light-beam {
+  background: linear-gradient(#ffcb865e, transparent 85%);
+}
+.beam-right {
+  background: linear-gradient(#f2905455, transparent 75%);
+}
+.stage-haze {
+  background:
+    radial-gradient(ellipse at 22% 60%, #d9ae7838, transparent 45%),
+    radial-gradient(ellipse at 75% 70%, #d5b58e30, transparent 40%);
+}
+.stage-stamp {
+  background: #261911da;
+  border: 1px solid #b39164;
+  color: #f0ce9d;
+  transform: rotate(-2deg);
+}
+.stage-caption {
+  background: #261911c9;
+  color: #e0c29a;
+}
+.stage-tech-readout {
+  color: #eacb9c;
+}
+.stage-ripple {
+  border-color: #f9c17b80;
+}
+.performer .musician-art {
+  filter: sepia(0.32) saturate(0.65);
+}
+.hanging-lamp {
+  position: absolute;
+  top: -7%;
+  width: 44px;
+  height: 100px;
+  transform-origin: 50% 0;
+  animation: lamp-sway 7s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.hanging-lamp:before {
+  content: "";
+  position: absolute;
+  height: 75px;
+  width: 2px;
+  background: #1b120c;
+  left: 21px;
+}
+.hanging-lamp i {
+  position: absolute;
+  bottom: 7px;
+  width: 44px;
+  height: 18px;
+  border-radius: 50% 50% 5% 5%;
+  background: #2b211a;
+  border-bottom: 4px solid #ffdb8d;
+  box-shadow: 0 10px 22px #f9ac4e55;
+}
+.lamp-one {
+  left: 16%;
+}
+.lamp-two {
+  right: 17%;
+  animation-delay: -3s;
+  animation-duration: 9s;
+}
+.roster-strip {
+  background: #2c221b;
+  border-color: #614b38;
+}
+.roster-slot {
+  background: #3f3023;
+  border-color: #7e644a;
+  transform: rotate(-3deg);
+}
+.roster-slot:nth-child(even) {
+  transform: rotate(3deg);
+}
+.roster-slot.filled {
+  border-color: #ddaf71;
+}
+.roster-slot > span {
+  background: #281e17ed;
+  color: #d3b894;
+}
+.roster-slot > b,
+.roster-caption b {
+  color: #c3a682;
+}
+.riff-console {
+  background: repeating-linear-gradient(0deg, #2e271f 0 1px, #27211b 1px 3px);
+  padding-top: 19px;
+}
+.amp-hardware {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #72583c;
+}
+.amp-speaker {
+  width: 57px;
+  height: 57px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: repeating-radial-gradient(circle, #171412 0 4px, #44382c 5px 7px);
+  border: 4px solid #806548;
+  box-shadow:
+    0 0 0 3px #17130e,
+    inset 0 0 10px #000;
+}
+.amp-name {
+  font: italic 800 28px/0.8 var(--display);
+  color: #dfcca8;
+  flex: 1;
+}
+.amp-name small {
+  font: 7px var(--mono);
+  letter-spacing: 1px;
+}
+.vu-meter {
+  width: 119px;
+  height: 58px;
+  position: relative;
+  overflow: hidden;
+  background: #d9bd82;
+  border: 5px solid #17120d;
+  border-radius: 40% 40% 3px 3px;
+  color: #42311e;
+  box-shadow: inset 0 2px 10px #946b3a;
+}
+.vu-meter > span {
+  position: absolute;
+  top: 9px;
+  left: 8px;
+  font: 7px var(--mono);
+  border-top: 2px solid #9d4932;
+  padding-top: 3px;
+}
+.vu-meter > i {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  height: 33px;
+  width: 2px;
+  background: #702817;
+  transform-origin: 50% 100%;
+  transform: rotate(-45deg);
+  transition: transform 0.2s;
+}
+.vu-meter > b {
+  position: absolute;
+  bottom: 2px;
+  left: 26px;
+  font: 5px var(--mono);
+}
+.amp-dial {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 4px solid #7d6951;
+  background: #181512;
+  position: relative;
+  margin-right: 5px;
+}
+.amp-dial i {
+  position: absolute;
+  left: 13px;
+  top: 0;
+  width: 2px;
+  height: 10px;
+  background: #e0c493;
+  transform: rotate(25deg);
+}
+.amp-dial span {
+  position: absolute;
+  bottom: -18px;
+  font: 7px var(--mono);
+  left: 3px;
+}
+.riff-active .amp-speaker {
+  animation: speaker-hit 0.12s infinite alternate;
+}
+.riff-active .vu-meter > i {
+  animation: needle-hit 0.23s infinite alternate;
+}
+.signal-label,
+.riff-meta,
+.riff-hint,
+.riff-hint span {
+  color: #c5ad8c;
+}
+.signal-bars i {
+  background: #96714c;
+}
+.motion-toggle {
+  background: #34281e;
+  color: #efd1a6;
+  border-color: #8d6b49;
+  min-height: 32px;
+  font-size: 8px;
+}
+.riff-button {
+  color: #29160e;
+  background: #d99650;
+  border: 2px solid #f0bd7a;
+  box-shadow:
+    0 5px 0 #6b3a20,
+    0 7px 0 #16100c;
+  clip-path: none;
+  border-radius: 3px;
+}
+.riff-button:hover {
+  background: #efb975;
+}
+.riff-button:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #6b3a20;
+}
+.riff-active .riff-button {
+  background: #f2bc74;
+}
+.riff-button > span:first-of-type {
+  font-style: normal;
+}
+.riff-hint {
+  margin-top: 18px;
+}
+.management {
+  --acid: #80351f;
+  --cyan: #723b24;
+  --border: #b59d77;
+  --muted: #66533e;
+  background: #dfcfaa;
+  color: #33291f;
+  border: 0;
+  box-shadow: 6px 7px 0 #0b080754;
+  position: relative;
+  margin-top: 9px;
+}
+.management:before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 33%;
+  width: 115px;
+  height: 24px;
+  z-index: 2;
+  transform: rotate(-3deg);
+  background: #a88f62d9;
+  box-shadow: 0 1px 2px #0002;
+}
+.ledger-label {
+  display: flex;
+  justify-content: space-between;
+  padding: 22px 22px 15px;
+  font: 8px var(--mono);
+  letter-spacing: 1px;
+  border-bottom: 1px dashed #8b7453;
+}
+.ledger-label b {
+  color: #914c32;
+}
+.tabs {
+  background: #c5b38e;
+  padding: 0 12px;
+  gap: 4px;
+}
+.tabs button {
+  color: #57452f;
+  min-height: 52px;
+  font-weight: 700;
+}
+.tabs button.active {
+  color: #f6e8cb;
+  background: #813c28;
+  border-color: #552b1d;
+  transform: rotate(-2deg);
+}
+.tabs button:hover:not(.active) {
+  background: #d5c6a7;
+  color: #552b1d;
+}
+.tabs button small {
+  color: inherit;
+  background: #57462b25;
+}
+.management-body {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0 31px,
+    #78613c0a 31px 32px
+  );
+  padding: 25px 22px;
+}
+.management .eyebrow {
+  color: #79583b;
+}
+.management-title h2 {
+  font-size: 41px;
+  text-transform: uppercase;
+  font-weight: 800;
+  line-height: 1;
+  margin-top: 8px;
+}
+.panel-description {
+  color: #69533d;
+}
+.quantity {
+  border-color: #a48a63;
+}
+.quantity button {
+  color: #665035;
+  min-width: 30px;
+  min-height: 30px;
+}
+.quantity button.active {
+  background: #694832;
+  color: #f3dfb9;
+}
+.gear-list {
+  gap: 0;
+}
+.gear-card,
+.gear-card.affordable {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px dashed #9f8864;
+  padding: 19px 0;
+  box-shadow: none;
+}
+.gear-card:hover {
+  background: #f4e7c22e;
+  transform: translateX(2px);
+}
+.gear-card:after {
+  color: #7a48251c;
+  font-size: 46px;
+  right: 49px;
+  top: 15px;
+}
+.gear-title h3 {
+  font-size: 25px;
+  color: #382c21;
+}
+.gear-icon {
+  background: #d0bb92;
+  border: 1px solid #9c7951;
+  color: #723e24;
+  box-shadow: 2px 2px #a38a6433;
+}
+.gear-card > p {
+  color: #695540;
+  font-size: 13px;
+}
+.gear-bottom {
+  border: 0;
+  margin-top: 9px;
+  padding-top: 2px;
+}
+.gear-benefit {
+  color: #725334;
+}
+.owned,
+.owned small {
+  color: #7a6448;
+}
+.buy-button {
+  border-color: #a78e69;
+  color: #766548;
+  background: #c9b78f;
+  min-height: 35px;
+}
+.buy-button:disabled {
+  color: #6b5b41;
+  opacity: 0.7;
+}
+.buy-button:not(:disabled) {
+  background: #88422b;
+  color: #fff0cd;
+  border-color: #66331f;
+  box-shadow: 2px 2px #9e825c;
+}
+.management .panel-footnote {
+  color: #6c5337;
+  border-color: #a98d62;
+}
+.band-player,
+.musician,
+.gig-card,
+.live-activity {
+  background: #cfbd97;
+  border-color: #a98e66;
+}
+.musician.selected,
+.live-activity {
+  background: #c3ae83;
+  border-color: #805636;
+}
+.management .musician-info p,
+.management .musician-info small,
+.management .requirements,
+.management .rewards,
+.management .role-label,
+.management .album-info p,
+.management .song-unlock-note {
+  color: #6b533b;
+}
+.management .small-badge {
+  color: #6e351e;
+  background: #bca072;
+}
+.management .outline-button,
+.management .recruit-button {
+  background: #e5d5b1;
+  border-color: #9e7f52;
+  color: #61381f;
+  min-height: 38px;
+}
+.management button:disabled {
+  color: #716046;
+}
+.management .gig-number {
+  color: #9c805b;
+}
+.management .unlocked .gig-number {
+  color: #88422b;
+}
+.management .album-card {
+  border-color: #ad936a;
+}
+.album-art {
+  border-color: #8d6a42;
+}
+.avatar {
+  background: #67503b;
+  border-color: #a28257;
+}
+.tutorial {
+  background: #3c2b1d;
+  border-color: #745032;
+  border-left-color: #d49b57;
+}
+.tutorial p {
+  color: #d2b492;
+}
+.road-panel,
+.song-player {
+  background: #2b221a;
+  border-color: #624a35;
+}
+.road-stop > span {
+  background: #36271b;
+  border-color: #8a6846;
+}
+.next-venue {
+  border-color: #694d34;
+}
+.song-cover {
+  border-color: #8d6a42;
+}
+.song-lock-message,
+.song-heading .eyebrow,
+.song-artist {
+  color: #ceb392;
+}
+.song-select {
+  color: #ecd4b0;
+  background: #21180f;
+  border-color: #846140;
+}
+footer {
+  border-color: #62462f;
+  color: #bba080;
+}
+@keyframes lamp-sway {
+  from {
+    transform: rotate(-5deg);
+  }
+  to {
+    transform: rotate(5deg);
+  }
+}
+@keyframes speaker-hit {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.07);
+  }
+}
+@keyframes needle-hit {
+  from {
+    transform: rotate(-12deg);
+  }
+  to {
+    transform: rotate(39deg);
+  }
+}
+@media (min-width: 1100px) {
+  .game-grid {
+    grid-template-columns: minmax(0, 1.42fr) minmax(380px, 1fr);
+    gap: 30px;
+  }
+}
+@media (max-width: 1150px) {
+  .transmission-art {
+    left: 61%;
+    width: 143px;
+    height: 143px;
+    top: 43px;
+  }
+  .era-label {
+    min-width: 120px;
+  }
+  .intro h1 {
+    font-size: 69px;
+  }
+}
+@media (max-width: 850px) {
+  .intro h1 {
+    font-size: 67px;
+  }
+  .transmission-art {
+    left: auto;
+    right: 35px;
+    top: 34px;
+    width: 143px;
+    height: 143px;
+  }
+  .intro .era-label {
+    display: none;
+  }
+  .intro:before {
+    font-size: 6px;
+    letter-spacing: 1px;
+  }
+}
+@media (max-width: 580px) {
+  .topbar {
+    height: 76px;
+  }
+  main {
+    padding-top: 20px;
+  }
+  .intro {
+    padding: 22px 13px 20px;
+    min-height: 225px;
+    border-left-width: 4px;
+    margin-bottom: 20px;
+  }
+  .intro h1 {
+    font-size: 53px;
+    max-width: 230px;
+    position: relative;
+    z-index: 1;
+  }
+  .intro p {
+    font-size: 12px;
+    max-width: 235px;
+    position: relative;
+    z-index: 1;
+  }
+  .intro .eyebrow {
+    font-size: 7px;
+    letter-spacing: 1px;
+  }
+  .intro:before {
+    top: 8px;
+    right: 10px;
+    font-size: 5px;
+  }
+  .transmission-art {
+    right: 11px;
+    top: 60px;
+    width: 83px;
+    height: 83px;
+    opacity: 0.62;
+    z-index: 0;
+  }
+  .transmission-art:after {
+    width: 40px;
+    left: 22px;
+    height: 15px;
+  }
+  .transmission-art > span {
+    display: none;
+  }
+  .stats {
+    border-width: 2px;
+  }
+  .stat {
+    padding: 15px;
+  }
+  .stat strong {
+    font-size: 27px;
+  }
+  .stat > span {
+    font-size: 8px;
+  }
+  .stage-panel {
+    border-width: 3px;
+  }
+  .venue-heading h2 {
+    font-size: 28px;
+  }
+  .amp-hardware {
+    gap: 12px;
+  }
+  .amp-speaker {
+    width: 42px;
+    height: 42px;
+  }
+  .amp-name {
+    font-size: 25px;
+  }
+  .amp-name small {
+    font-size: 5px;
+  }
+  .amp-dial {
+    display: none;
+  }
+  .vu-meter {
+    width: 102px;
+  }
+  .management-body {
+    padding: 22px 16px;
+  }
+  .ledger-label {
+    padding: 22px 16px 15px;
+    font-size: 7px;
+  }
+  .management-title h2 {
+    font-size: 35px;
+  }
+  .gear-title h3 {
+    font-size: 24px;
+  }
+  .motion-toggle {
+    min-height: 34px;
+    font-size: 7px;
+  }
+  .riff-button > span:first-of-type {
+    font-size: 28px;
+  }
+}
+.reduce-motion *,
+.reduce-motion *:before,
+.reduce-motion *:after {
+  animation: none !important;
+  transition: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .app *,
+  .app *:before,
+  .app *:after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+/* Ink contrast on the paper surfaces, including secondary game data. */
+.management .quantity {
+  background: #cbb68f;
+  height: auto;
+}
+.management .gear-icon {
+  background: #ccb48a;
+  color: #683d27;
+  border-color: #99754e;
+}
+.management .owned b,
+.management .gear-benefit small,
+.management .buy-button > span,
+.management .panel-footnote > span:last-child,
+.management .band-player p,
+.management .role-label span:last-child,
+.management .musician-info > span,
+.management .gig-info p,
+.management .album-info > small {
+  color: #655039;
+}
+.management .gear-benefit small {
+  border-color: #a28a65;
+}
+.management .buy-button:disabled {
+  background: #c2ac82;
+  border-color: #9b7b52;
+  color: #59452f;
+  opacity: 1;
+}
+.management .buy-button:not(:disabled) > span {
+  color: #f1d5ab;
+}
+.management .outline-button:hover:not(:disabled),
+.management .recruit-button:hover:not(:disabled),
+.management .buy-button:hover:not(:disabled) {
+  background: #69351f;
+  color: #fff0cd;
+}
+.management .buy-button:hover:not(:disabled) > span {
+  color: #fff0cd;
+}
+.management .gig-card.unlocked {
+  border-color: #94603e;
+}
+.management:after {
+  content: "";
+  position: absolute;
+  height: 7px;
+  bottom: -6px;
+  left: 0;
+  right: 0;
+  background: #dfcfaa;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 60%,
+    97% 30%,
+    94% 100%,
+    90% 40%,
+    85% 80%,
+    80% 20%,
+    75% 90%,
+    70% 40%,
+    65% 80%,
+    60% 30%,
+    55% 100%,
+    50% 50%,
+    45% 80%,
+    40% 30%,
+    35% 100%,
+    30% 60%,
+    25% 90%,
+    20% 30%,
+    15% 70%,
+    10% 40%,
+    5% 100%,
+    0 40%
+  );
+}

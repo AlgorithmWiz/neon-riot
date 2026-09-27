@@ -370,7 +370,9 @@ test("soundtrack plays on request, seeks, and persists across game tabs", async 
   page,
 }) => {
   await seed(page, { ...fresh(), albums: [4] });
-  const audio = page.locator(".song-player audio");
+  const audio = page
+    .getByRole("region", { name: "Pirate radio music player" })
+    .locator("audio");
   await expect
     .poll(() => audio.evaluate((el: HTMLAudioElement) => el.duration))
     .toBeGreaterThan(0);
@@ -384,7 +386,9 @@ test("soundtrack plays on request, seeks, and persists across game tabs", async 
   await expect
     .poll(() => audio.evaluate((el: HTMLAudioElement) => el.currentTime))
     .toBeGreaterThan(0);
-  await expect(page.locator(".song-player")).toContainText("ON AIR");
+  await expect(
+    page.getByRole("region", { name: "Pirate radio music player" }),
+  ).toContainText("ON AIR");
   await audio.evaluate((el: HTMLAudioElement) => {
     el.currentTime = 30;
   });
@@ -394,38 +398,48 @@ test("soundtrack plays on request, seeks, and persists across game tabs", async 
     .toBeGreaterThanOrEqual(30);
   expect(await audio.evaluate((el: HTMLAudioElement) => el.paused)).toBe(false);
   await audio.evaluate((el: HTMLAudioElement) => el.pause());
-  await expect(page.locator(".song-player")).toContainText("TRACK 05");
+  await expect(
+    page.getByRole("region", { name: "Pirate radio music player" }),
+  ).toContainText("TRACK 05");
   await page.reload();
   expect(
     await page
-      .locator(".song-player audio")
+      .getByRole("region", { name: "Pirate radio music player" })
+      .locator("audio")
       .evaluate((el: HTMLAudioElement) => el.paused),
   ).toBe(true);
 });
 
-test("all five singles load and play from albums and the radio selector", async ({
+test("all six singles load and play from albums and the radio selector", async ({
   page,
 }) => {
-  await seed(page, { ...fresh(), albums: [0, 1, 2, 3, 4] });
+  await seed(page, { ...fresh(), albums: [0, 1, 2, 3, 4, 5] });
   await page.getByRole("button", { name: "Albums", exact: true }).click();
-  const audio = page.locator(".song-player audio");
+  const audio = page
+    .getByRole("region", { name: "Pirate radio music player" })
+    .locator("audio");
   const titles = [
     "Static in the Wires",
     "Concrete Cathedral",
     "Chrome Is a Disease",
     "No Gods / Only Noise",
     "Kill the Algorithm",
+    "Earth Is the Opening Act",
   ];
   await expect(
     page.getByRole("button", { name: "LISTEN TO SINGLE", exact: true }),
-  ).toHaveCount(5);
+  ).toHaveCount(6);
   for (const title of titles) {
     await page
       .locator(".album-card")
       .filter({ hasText: title })
       .getByRole("button", { name: "LISTEN TO SINGLE", exact: true })
       .click();
-    await expect(page.locator(".song-player h3")).toHaveText(title);
+    await expect(
+      page
+        .getByRole("region", { name: "Pirate radio music player" })
+        .locator("h3"),
+    ).toHaveText(title);
     await expect
       .poll(() => audio.evaluate((el: HTMLAudioElement) => el.duration))
       .toBeGreaterThan(0);
@@ -451,7 +465,7 @@ test("all five singles load and play from albums and the radio selector", async 
 
 test("songs stay locked until their albums are released", async ({ page }) => {
   await page.goto("/");
-  const radio = page.locator(".song-player");
+  const radio = page.getByRole("region", { name: "Pirate radio music player" });
   await expect(radio).toContainText("SIGNAL LOCKED");
   await expect(radio).toContainText("Release an album to unlock its song");
   await expect(radio.locator("audio")).toHaveCount(0);
@@ -459,12 +473,12 @@ test("songs stay locked until their albums are released", async ({ page }) => {
   await expect(
     page.getByRole("button", { name: "LISTEN TO SINGLE", exact: true }),
   ).toHaveCount(0);
-  await expect(page.getByText("RELEASE TO UNLOCK SONG")).toHaveCount(5);
+  await expect(page.getByText("RELEASE TO UNLOCK SONG")).toHaveCount(6);
 });
 
 test("a released album unlocks only its own song", async ({ page }) => {
   await seed(page, { ...fresh(), albums: [0] });
-  const radio = page.locator(".song-player");
+  const radio = page.getByRole("region", { name: "Pirate radio music player" });
   await expect(radio).toContainText("Static in the Wires");
   await expect(page.getByLabel("Choose a song").locator("option")).toHaveCount(
     1,
@@ -473,4 +487,103 @@ test("a released album unlocks only its own song", async ({ page }) => {
   await expect(
     page.getByRole("button", { name: "LISTEN TO SINGLE", exact: true }),
   ).toHaveCount(1);
+});
+
+test("articulated band loops respond to gigs and stop with visual effects", async ({
+  page,
+}) => {
+  await seed(page, {
+    ...fresh(),
+    credits: 100000,
+    recruited: ["hex", "echo", "nyx", "zero"],
+    lineup: { drums: "hex", bass: "echo", vocals: "nyx", synth: "zero" },
+  });
+  const stage = page.locator(".performance-stage");
+  await stage.scrollIntoViewIfNeeded();
+  const heads = stage.locator(".rig-head");
+  await expect(heads).toHaveCount(5);
+  const initial = await heads.evaluateAll((nodes) =>
+    nodes.map((node) => getComputedStyle(node).transform),
+  );
+  await expect
+    .poll(() =>
+      heads.evaluateAll((nodes) =>
+        nodes.map((node) => getComputedStyle(node).transform),
+      ),
+    )
+    .not.toEqual(initial);
+  // Recruited portraits remain static; the animated cutouts only exist on stage.
+  await expect(page.locator(".roster-strip .rig-part")).toHaveCount(0);
+  const idleDuration = await heads
+    .first()
+    .evaluate((node) => parseFloat(getComputedStyle(node).animationDuration));
+  await page.getByRole("button", { name: "Gigs", exact: true }).click();
+  await page
+    .getByRole("button", { name: "BOOK SHOW", exact: true })
+    .first()
+    .click();
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveClass(/is-live/);
+  expect(
+    await heads
+      .first()
+      .evaluate((node) => parseFloat(getComputedStyle(node).animationDuration)),
+  ).toBeLessThan(idleDuration);
+  // The drum kit and synth stand do not bounce with the animated hands/head.
+  for (const role of ["drums", "synth"]) {
+    expect(
+      await stage
+        .locator(`.performer-${role} .performer-motion`)
+        .evaluate((node) => getComputedStyle(node).animationName),
+    ).toBe("none");
+  }
+  await page
+    .getByRole("button", { name: "Pause visual effects", exact: true })
+    .click();
+  expect(
+    await stage
+      .locator(".rig-part")
+      .evaluateAll((nodes) =>
+        nodes.every((node) => getComputedStyle(node).animationName === "none"),
+      ),
+  ).toBe(true);
+  await page.getByRole("button", { name: "PLAY RIFF MAKE SOME NOISE" }).click();
+  expect((await saved(page)).riffs).toBe(1);
+  await page
+    .getByRole("button", { name: "Resume visual effects", exact: true })
+    .click();
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  expect(
+    await stage
+      .locator(".rig-part")
+      .evaluateAll((nodes) =>
+        nodes.every((node) => getComputedStyle(node).animationName === "none"),
+      ),
+  ).toBe(true);
+});
+
+test("background music loops and yields to the final album", async ({
+  page,
+}) => {
+  await seed(page, { ...fresh(), albums: [5] });
+  const background = page.getByRole("region", { name: "Background music" });
+  const bed = background.locator("audio");
+  await page.getByRole("button", { name: "PLAY RIFF MAKE SOME NOISE" }).click();
+  await expect
+    .poll(() => bed.evaluate((a: HTMLAudioElement) => !a.paused && a.loop))
+    .toBe(true);
+  const radio = page.getByRole("region", { name: "Pirate radio music player" });
+  await expect(radio).toContainText("Earth Is the Opening Act");
+  await radio.locator("audio").evaluate((a: HTMLAudioElement) => a.play());
+  await expect
+    .poll(() => bed.evaluate((a: HTMLAudioElement) => a.paused))
+    .toBe(true);
+  await radio.locator("audio").evaluate((a: HTMLAudioElement) => a.pause());
+  await expect
+    .poll(() => bed.evaluate((a: HTMLAudioElement) => a.paused))
+    .toBe(false);
+  await page.getByRole("button", { name: "Mute background music" }).click();
+  await expect
+    .poll(() => bed.evaluate((a: HTMLAudioElement) => a.paused))
+    .toBe(true);
 });

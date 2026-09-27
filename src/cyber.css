@@ -1,0 +1,679 @@
+/* 2089: hacked future tech built into rusted infrastructure. */
+:root {
+  --cyan: #65e4e3;
+  --acid: #d6ea73;
+  --border: #465650;
+}
+.app {
+  background:
+    linear-gradient(#0a1017eb, #111215f5),
+    url("/art/cyber-foundry.webp") center top / 1500px auto repeat-y;
+}
+.topbar {
+  border-color: #416a70;
+}
+.topbar:after {
+  content: "SECTOR 07 // SIGNAL UNTRACEABLE";
+  color: #70d7d1;
+  background: #11181c;
+}
+.brand-symbol {
+  background: #c36341;
+  color: #b7ffff;
+  box-shadow: 3px 0 #5de2e1;
+}
+.brand-riot {
+  color: #77ece3;
+  text-shadow: 2px 0 #5c2945;
+}
+.top-center {
+  color: #a0c3c5;
+}
+.intro {
+  border-left-color: #65dcd7;
+  background:
+    linear-gradient(90deg, #0d1822f2 32%, #13182480),
+    url("/art/cyber-foundry.webp") center 36% / cover;
+}
+.intro:before {
+  content: "2089 / MEGACITY UNDERGROUND / PIRATE UPLINK";
+  color: #8bc6cf;
+}
+.intro .eyebrow {
+  color: #6ff0e4;
+}
+.intro h1 span {
+  color: #d8ee94;
+  text-shadow:
+    3px 1px #823953,
+    -2px 0 #378f9a;
+}
+.intro p {
+  color: #bdcccb;
+}
+.era-label > span,
+.era-label small {
+  color: #8fbec4;
+}
+.stats {
+  background: repeating-linear-gradient(0deg, #202526 0 2px, #1c2123 2px 4px);
+  border-color: #5b726c;
+}
+.stat {
+  border-color: #465854;
+}
+.stat > span {
+  color: #a8c6c0;
+}
+.stat > span svg {
+  color: #69d7d1;
+}
+.stat strong {
+  color: #d8e9d5;
+  text-shadow: 0 0 14px #70e6d522;
+}
+.stat strong.acid {
+  color: #ddf08e;
+}
+.stat p,
+.stat strong small {
+  color: #adbbb2;
+}
+.legend-stat:hover {
+  background: #2a3a39;
+}
+.stage-panel {
+  border-color: #4a4540;
+  box-shadow:
+    0 0 0 1px #70867d,
+    6px 8px #080d1166;
+}
+.panel-top {
+  background: #182528;
+  border-color: #517170;
+}
+.panel-top .eyebrow,
+.panel-top .mono {
+  color: #97d9d5;
+}
+.venue-heading {
+  background: linear-gradient(100deg, #263239, #302921);
+}
+.venue-heading p {
+  color: #99bab9;
+}
+.stage-container {
+  border-color: #638986;
+}
+.scene-color {
+  background: linear-gradient(0deg, #035b7438, transparent 70%);
+}
+.scene-backdrop {
+  filter: saturate(0.95) contrast(1.04);
+}
+.performer .musician-art {
+  filter: none;
+}
+.performer .alternate-art {
+  filter: hue-rotate(18deg);
+}
+.light-beam {
+  background: linear-gradient(#62f6ff70, transparent 85%);
+}
+.beam-right {
+  background: linear-gradient(#ef67b85c, transparent 75%);
+}
+.stage-haze {
+  background:
+    radial-gradient(ellipse at 22% 60%, #7bcfdf30, transparent 45%),
+    radial-gradient(ellipse at 75% 70%, #d488ba29, transparent 40%);
+}
+.venue-neon-sign {
+  top: 9%;
+  left: 25%;
+  right: 25%;
+  background: #07151bd1;
+  color: #adffef;
+  border-color: #62c6cb;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 7px #65efdc;
+  box-shadow: 0 0 14px #48d7cb20;
+}
+.stage-stamp {
+  background: #0a1922df;
+  border-color: #71aeb2;
+  color: #a8f5e9;
+}
+.stage-caption {
+  background: #0a1922db;
+  color: #a0e4df;
+}
+.stage-tech-readout {
+  color: #94f5e8;
+}
+.scene-scanlines {
+  opacity: 0.2;
+}
+.stage-ripple {
+  border-color: #69f6e7a0;
+}
+.stage-circuit {
+  position: absolute;
+  top: 23%;
+  height: 34%;
+  width: 7px;
+  border: 1px solid #51d8dba0;
+  border-bottom: 0;
+  pointer-events: none;
+  opacity: 0.65;
+  box-shadow: 0 0 10px #3adecf44;
+}
+.circuit-left {
+  left: 3%;
+  transform: skewY(-20deg);
+}
+.circuit-right {
+  right: 3%;
+  transform: skewY(20deg);
+  border-color: #e974d1;
+  box-shadow: 0 0 10px #e974d144;
+}
+.stage-circuit:after {
+  content: "";
+  position: absolute;
+  bottom: -18px;
+  left: -3px;
+  width: 11px;
+  height: 11px;
+  border: 1px solid currentColor;
+  color: #6de9e2;
+  transform: rotate(45deg);
+}
+.holo-grid {
+  position: absolute;
+  bottom: 1%;
+  left: 4%;
+  right: 4%;
+  height: 21%;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 49px, #6ce5e73b 50px 51px),
+    repeating-linear-gradient(0deg, transparent 0 21px, #6ce5e730 22px 23px);
+  transform: perspective(150px) rotateX(55deg);
+  transform-origin: 50% 100%;
+  opacity: 0.26;
+  pointer-events: none;
+}
+.roster-strip {
+  background: #1d2c2e;
+  border-color: #4d6c68;
+}
+.roster-slot {
+  background: #24373a;
+  border-color: #5a8681;
+}
+.roster-slot > span {
+  background: #101d25eb;
+}
+.roster-slot.filled {
+  border-color: #86d7b4;
+}
+.riff-console {
+  background: repeating-linear-gradient(0deg, #272e2b 0 1px, #222825 1px 3px);
+}
+.signal-bars i {
+  background: #527c75;
+}
+.signal-active i {
+  background: #86f4d5;
+}
+.motion-toggle {
+  background: #1b2c2a;
+  border-color: #678e7a;
+  color: #b5edd3;
+}
+.riff-button {
+  background: #d5d987;
+  border-color: #f1e5ac;
+  box-shadow:
+    0 5px #66724e,
+    0 7px #131b17;
+}
+.riff-button:hover,
+.riff-active .riff-button {
+  background: #e7f4a1;
+}
+.management {
+  --acid: #91e2cd;
+  --cyan: #88e9de;
+  --border: #54716c;
+  background: #202e31;
+  color: #e3e6d4;
+  border: 1px solid #68877e;
+  box-shadow: 5px 7px #070c1177;
+}
+.management:before {
+  background: #b9a17ada;
+}
+.management:after {
+  background: #202e31;
+}
+.ledger-label {
+  color: #96c7c0;
+  border-color: #607a70;
+  background: #18272d;
+}
+.ledger-label b {
+  color: #eea4c9;
+}
+.tabs {
+  background: #152428;
+  border-bottom: 1px solid #55756f;
+}
+.tabs button {
+  color: #a5c1b8;
+}
+.tabs button.active {
+  color: #072329;
+  background: #80cfc1;
+  border-color: #b4f4dd;
+}
+.tabs button:hover:not(.active) {
+  background: #304946;
+  color: #d8f6e5;
+}
+.management-body {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0 31px,
+    #9ee9d305 31px 32px
+  );
+}
+.management .eyebrow {
+  color: #90b5a6;
+}
+.management .panel-description {
+  color: #adbdaf;
+}
+.management .quantity {
+  background: #142323;
+  border-color: #5d7666;
+}
+.management .quantity button {
+  color: #a9bfab;
+}
+.management .quantity button.active {
+  background: #526b50;
+  color: #ecf5cf;
+}
+.management .gear-card {
+  border-color: #536659;
+}
+.management .gear-card:hover {
+  background: #9fd2af0a;
+}
+.management .gear-card:after {
+  color: #a8dab516;
+}
+.management .gear-title h3 {
+  color: #e4e7d3;
+}
+.management .gear-icon {
+  background: #35443a;
+  border-color: #647b5a;
+  color: #c3d997;
+}
+.management .gear-card > p {
+  color: #b7c3ae;
+}
+.management .gear-benefit,
+.management .owned {
+  color: #acd8c1;
+}
+.management .owned b,
+.management .gear-benefit small,
+.management .buy-button > span,
+.management .panel-footnote > span:last-child,
+.management .band-player p,
+.management .role-label span:last-child,
+.management .musician-info > span,
+.management .gig-info p,
+.management .album-info > small {
+  color: #b4c4b0;
+}
+.management .buy-button:disabled {
+  background: #2b3831;
+  border-color: #576d59;
+  color: #aebba3;
+}
+.management .buy-button:not(:disabled) {
+  background: #566845;
+  color: #eaf3c2;
+  border-color: #8c9d6c;
+}
+.management .buy-button:not(:disabled) > span {
+  color: #eaf3c2;
+}
+.management .panel-footnote {
+  color: #a4b99f;
+}
+.management .band-player,
+.management .musician,
+.management .gig-card,
+.management .live-activity {
+  background: #293c39;
+  border-color: #516d61;
+}
+.management .musician.selected,
+.management .live-activity {
+  background: #334b40;
+  border-color: #84a778;
+}
+.management .musician-info p,
+.management .requirements,
+.management .rewards,
+.management .role-label,
+.management .album-info p,
+.management .song-unlock-note {
+  color: #b8cbb4;
+}
+.management .outline-button,
+.management .recruit-button {
+  background: #24362f;
+  border-color: #5e7c61;
+  color: #d4e9b7;
+}
+.management button:disabled {
+  color: #aebba3;
+}
+.management .small-badge {
+  color: #d6eea5;
+  background: #475a37;
+}
+.management .unlocked .gig-number {
+  color: #85dfcc;
+}
+.management .gig-card.unlocked {
+  border-color: #6da896;
+}
+.management .gig-number {
+  color: #8aa397;
+}
+.management .album-card {
+  border-color: #546b60;
+}
+.management .activity-progress > div {
+  color: #c4dac4;
+}
+.management .outline-button:hover:not(:disabled),
+.management .recruit-button:hover:not(:disabled),
+.management .buy-button:hover:not(:disabled) {
+  background: #6c8050;
+  color: #f2ffcd;
+}
+.song-player,
+.road-panel {
+  background: #1c2b2d;
+  border-color: #526d65;
+}
+.song-select {
+  background: #142223;
+  border-color: #577a6d;
+  color: #d6e9d7;
+}
+.road-stop > span {
+  background: #263738;
+  border-color: #6c9080;
+}
+.next-venue {
+  border-color: #516e65;
+}
+footer {
+  border-color: #4f6d62;
+}
+/* Each cutout joint has its own rhythm; feet, drums and keyboard stay anchored. */
+.performance-stage {
+  --head-speed: 2.8s;
+  --hand-speed: 1.6s;
+  --body-speed: 3.2s;
+}
+.performance-stage.is-live {
+  --head-speed: 0.88s;
+  --hand-speed: 0.44s;
+  --body-speed: 1.76s;
+}
+.performance-stage.is-playing {
+  --head-speed: 0.56s;
+  --hand-speed: 0.28s;
+  --body-speed: 1.12s;
+}
+.performer .performer-motion {
+  animation: weight-shift var(--body-speed) ease-in-out infinite;
+  transform-origin: 50% 96%;
+}
+.performer-bass .performer-motion {
+  animation-name: bass-groove;
+  animation-delay: -0.44s;
+}
+.performer-vocals .performer-motion {
+  animation-name: vocal-lean;
+  animation-delay: -0.22s;
+}
+.performer-drums .performer-motion,
+.performer-synth .performer-motion {
+  animation: none;
+}
+.is-playing .performer-guitar .performer-motion {
+  animation: weight-shift var(--body-speed) ease-in-out infinite;
+}
+.is-live .performer-vocals .performer-motion {
+  animation-duration: var(--body-speed);
+}
+.rig-part {
+  transform-box: view-box;
+}
+.rig-head {
+  animation: head-nod var(--head-speed) ease-in-out infinite;
+}
+.rig-hand {
+  animation: pick-stroke var(--hand-speed) ease-in-out infinite;
+}
+.rig-bass .rig-head {
+  animation-name: bass-nod;
+  animation-delay: -0.4s;
+}
+.rig-bass .rig-hand {
+  animation-name: bass-pluck;
+  animation-delay: -0.2s;
+}
+.rig-drums .rig-head {
+  animation-name: drummer-nod;
+  animation-delay: -0.22s;
+}
+.rig-drums .rig-hand {
+  animation-name: stick-strike;
+}
+.rig-drums .rig-offhand {
+  animation-delay: calc(var(--hand-speed) / -2);
+}
+.rig-synth .rig-head {
+  animation-name: synth-nod;
+  animation-duration: calc(var(--head-speed) * 2);
+}
+.rig-synth .rig-hand {
+  animation-name: key-press;
+}
+.rig-synth .rig-offhand {
+  animation-delay: calc(var(--hand-speed) / -2);
+}
+.rig-vocals .rig-head {
+  animation-name: sing-phrase;
+  animation-duration: calc(var(--head-speed) * 2);
+}
+@keyframes weight-shift {
+  0%,
+  100% {
+    transform: skewX(-0.6deg) scaleY(1);
+  }
+  25% {
+    transform: skewX(0.6deg) scaleY(0.985);
+  }
+  50% {
+    transform: skewX(1deg) scaleY(1);
+  }
+  75% {
+    transform: skewX(-0.3deg) scaleY(0.99);
+  }
+}
+@keyframes bass-groove {
+  0%,
+  100% {
+    transform: skewX(-1deg);
+  }
+  35% {
+    transform: skewX(0.8deg) scaleY(0.99);
+  }
+  70% {
+    transform: skewX(0.25deg);
+  }
+}
+@keyframes vocal-lean {
+  0%,
+  100% {
+    transform: skewX(0);
+  }
+  30% {
+    transform: skewX(-1.7deg) scaleY(0.99);
+  }
+  65% {
+    transform: skewX(-0.4deg);
+  }
+}
+@keyframes head-nod {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  25% {
+    transform: rotate(3deg) translateY(2px);
+  }
+  60% {
+    transform: rotate(-1deg);
+  }
+}
+@keyframes bass-nod {
+  0%,
+  100% {
+    transform: rotate(1deg);
+  }
+  45% {
+    transform: rotate(-2deg) translateY(2px);
+  }
+}
+@keyframes drummer-nod {
+  0%,
+  100% {
+    transform: rotate(-1deg);
+  }
+  50% {
+    transform: rotate(2deg) translateY(2px);
+  }
+}
+@keyframes synth-nod {
+  0%,
+  100% {
+    transform: rotate(-1deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+@keyframes sing-phrase {
+  0%,
+  100% {
+    transform: rotate(-1deg);
+  }
+  25% {
+    transform: rotate(1.5deg);
+  }
+  55% {
+    transform: rotate(-2deg);
+  }
+  80% {
+    transform: rotate(0.5deg);
+  }
+}
+@keyframes pick-stroke {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  32% {
+    transform: rotate(3deg);
+  }
+  60% {
+    transform: rotate(-1deg);
+  }
+}
+@keyframes bass-pluck {
+  0%,
+  100% {
+    transform: rotate(-1deg);
+  }
+  40% {
+    transform: rotate(2deg);
+  }
+}
+@keyframes stick-strike {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  38% {
+    transform: rotate(3deg);
+  }
+  55% {
+    transform: rotate(1deg);
+  }
+}
+@keyframes key-press {
+  0%,
+  100% {
+    transform: translateY(-1px) rotate(-1deg);
+  }
+  30%,
+  55% {
+    transform: translateY(2px) rotate(1deg);
+  }
+}
+@media (max-width: 580px) {
+  .intro h1 span {
+    letter-spacing: 1px;
+  }
+  .venue-neon-sign {
+    left: 19%;
+    right: 19%;
+    top: 13%;
+    font-size: 5px;
+    letter-spacing: 0.8px;
+  }
+  .ledger-label {
+    font-size: 6px;
+    letter-spacing: 0.7px;
+  }
+}
+/* Authoring loops never drive game state. Pause all parts, including nested SVGs. */
+.motion-paused * {
+  animation-play-state: paused !important;
+}
+.reduce-motion .rig-part,
+.reduce-motion .performer-motion {
+  animation: none !important;
+  transform: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rig-part,
+  .performer-motion {
+    animation: none !important;
+    transform: none !important;
+  }
+}

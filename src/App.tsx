@@ -417,12 +417,12 @@ export default function App() {
           <div className="transmission-art" aria-hidden="true">
             <div className="record-disc" />
             <img
-              src={`${import.meta.env.BASE_URL}art/concrete-cathedral.webp`}
+              src={`${import.meta.env.BASE_URL}art/basement-poster.webp`}
               alt=""
               width="1254"
               height="1254"
             />
-            <span>BOOTLEG TRANSMISSION / VOL. 01</span>
+            <span>FLYPOSTED / NO PERMISSION GIVEN</span>
           </div>
           <div className="era-label">
             <span>CAREER TRANSMISSION</span>
@@ -540,6 +540,23 @@ export default function App() {
               </div>
               <RosterStrip state={state} />
               <div className={`riff-console ${playing ? "riff-active" : ""}`}>
+                <div className="amp-hardware" aria-hidden="true">
+                  <div className="amp-speaker" />
+                  <div className="amp-name">
+                    RIOT
+                    <br />
+                    <small>HANDWIRED / HIGH VOLTAGE</small>
+                  </div>
+                  <div className="vu-meter">
+                    <span>−20　−10　0　+3</span>
+                    <i />
+                    <b>OUTPUT / dB</b>
+                  </div>
+                  <div className="amp-dial">
+                    <i />
+                    <span>GAIN</span>
+                  </div>
+                </div>
                 <div className="signal-deck">
                   <span className="signal-label">
                     SIGNAL /{" "}
@@ -682,6 +699,10 @@ export default function App() {
             </section>
           </section>
           <section className="management" id="management">
+            <div className="ledger-label" aria-hidden="true">
+              <span>OFF-GRID / ENCRYPTED</span>
+              <b>TOUR TERMINAL / 01</b>
+            </div>
             <nav className="tabs" aria-label="Band management">
               {(["Gear", "Band", "Gigs", "Albums"] as Tab[]).map((t) => {
                 const Icon =
